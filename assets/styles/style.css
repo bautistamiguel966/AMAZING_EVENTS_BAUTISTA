@@ -1,0 +1,378 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+body{
+    /* background-color: orange !important; */
+    overflow-x: hidden;
+    height: auto;
+}
+main{
+    /* background-color: #00b4d8; */
+    background-color: #0077b6;
+    width: auto;
+    height: auto;
+}
+header{
+    /* background-color: #03045e; */
+    background-color: #0077b6;
+    /* background-color: #314bbd; */
+    /* background-color: #90e0ef; */
+    width: auto;
+    
+}
+footer{
+    background-color: #90e0ef;
+    width: auto;
+    
+}
+
+#img-logo{
+    width: 200px;
+}
+
+#red-1, #red-2, #red-3{
+    width: 40px;
+}
+
+
+#navbarNav {
+    justify-content: flex-end;
+}
+
+.nav-item {
+    margin: 2px;
+    border: 2px solid rgb(190, 47, 118);
+    border-radius: 5%;
+}
+
+.active{
+    background-color: rgb(190, 47, 118);
+    /* color: #ffffff; */
+}
+
+#item-1, #item-2, #item-3, #item-4, #item-5{
+    color: #ffffff;
+    /* color: #000000; */
+}
+#row-nav{
+    display: flex;
+    
+}
+
+.footer-logos{
+    display: flex;
+}
+
+#row-form{
+    display: flex;
+    justify-content: center;
+}
+
+#boton-desplegar{
+    background-color: rgb(190, 47, 118);
+    border: 2px solid #ffffff;
+    margin: 4px;
+}
+#row-carrusel{
+    background-color: #0077b6;
+    
+}
+.carousel-item{
+    height: 30vh;
+    /* background-color: #0077b6; */
+    background-color: #023e8a;
+}
+
+.carousel-inner h2{
+    font-size: 4em;
+    color: #ffffff;
+}
+
+/*Categorias y buscador*/
+#container-1{
+    display: flex;
+    margin: 40px;
+}
+#categorias{
+    display: flex;
+    justify-content: flex-end;
+    
+    /* background-color: bisque; */
+    /* width: 70%; */
+
+}
+
+#buscador{
+    display: flex;
+    justify-content: flex-end;
+    width: 10%;
+
+}
+
+#categorias div {
+    margin: 20px;
+}
+#label-buscar{
+    width: 25vw;
+}
+
+/*************************Cartas******************************/
+
+.precio{
+    display: flex;
+    justify-content: space-around;
+}
+.datos{
+    display: flex;
+    justify-content: space-around;
+}
+.precio p{
+    align-self: baseline;
+}
+
+figure {
+    height: 40%;
+}
+
+figure img {
+    height: 100%;
+}
+
+#tarjetas{
+    display: flex;
+    justify-content: center;
+    gap: 3%;
+    
+}
+.card{
+    margin-bottom: 2%; 
+    
+}
+#tarjeta-1, #tarjeta-2, #tarjeta-3, #tarjeta-4, #tarjeta-5, #tarjeta-6{
+    background-color: #caf0f8;
+}
+
+
+/************************FOOTER*********************************/
+#row-footer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-self: center;
+}
+
+#cohort p{
+    display: flex;
+    justify-content: center;
+    margin-top: 2%;
+
+}
+.lista-redes{
+    display: flex;
+    margin-top: 2%;
+}
+
+
+ul{
+    list-style: none;
+}
+
+/*******************CONTACT HTML*********************/
+#row-form{
+    
+    margin: 4%;
+}
+
+form div{
+    margin: 12px;
+}
+#enviar{
+    width: 100%;
+}
+
+.main-contact{
+    height: 85vh;
+}
+
+
+/**********************DETAIL*************************/
+
+.main-detalle{
+    height: 85vh;
+}
+#row-detalle{
+    display: flex;
+    justify-content: center;
+    /* height: 85vh; */
+    gap: 2%;
+    padding: 10%;
+    align-content: center;
+    
+    
+}
+
+#detalle-imagen{
+    display: flex;
+    border: 2px solid #023e8a;
+    background-color: #caf0f8;
+    justify-content: center;
+    height: auto;
+    
+    
+}
+
+#detalle-texto{
+    border: 2px solid #023e8a;
+    background-color: #caf0f8;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/******************* STATS *********************/
+
+/* div table{
+    margin-right: 5%;
+} */
+table{
+    background-color: #caf0f8;
+}
+
+#row-tablas{
+    display: flex;
+    justify-content: center;
+}
+
+thead th{
+    text-align: center;
+}
+
+
+/*******************MEDIA********************/
+
+@media (max-width:1200px){
+    #buscador{
+        /* justify-content: flex-end; */
+        align-self: center;
+        justify-content: center;
+    }
+}
+
+@media (max-width:1120px){
+
+    #container-1{
+        display: flex;
+        flex-direction: column;
+        margin: 40px;
+    }
+
+    #categorias{
+        justify-content: center;
+    }
+
+    #buscador{
+        /* justify-content: flex-end; */
+        align-self: center;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 991px){
+    .navbar-nav{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .nav-item{
+        display: flex;
+        flex-direction: column;
+        width: 35%;
+    }
+
+    .nav-link{
+        text-align: center;
+        justify-self: center;
+    }
+
+    /*footer*/
+    #cohort p{
+        display: flex;
+        justify-content: center;
+        margin-top: 2%;
+    
+    }
+    .lista-redes{
+        display: flex;
+        justify-content: center;
+        margin-top: 2%;
+    }
+}
+
+
+
+
+@media (max-width:768px){
+    .navbar-nav{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .nav-item{
+        display: flex;
+        flex-direction: column;
+        width: 35%;
+    }
+
+    .nav-link{
+        text-align: center;
+        justify-self: center;
+    }
+    #buscador{
+        display: flex;
+        justify-content: center;
+        width: 10%;
+    
+    }
+}
+
+/* @media (max-width: 758){
+    .carousel-item h2{
+        font-size: 2em;
+        color: black;
+    }
+} */
+
+@media (max-width:630px){
+    #categorias{
+        flex-wrap: wrap;
+    }
+}
+
+@media (max-width:426px){
+
+    header{
+        width: 102%;
+    }
+
+    main{
+        width: 102%;
+    }
+    .nav-item{
+        width: 50%;
+    }
+
+}
+
+@media (max-width:340px){
+    #categorias{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+}
+
+
+
