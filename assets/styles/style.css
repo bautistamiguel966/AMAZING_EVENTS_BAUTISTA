@@ -15,7 +15,7 @@ main{
 }
 header{
     /* background-color: #03045e; */
-    background-color: #0077b6;
+    background-color: #088bd2;
     /* background-color: #314bbd; */
     /* background-color: #90e0ef; */
     width: auto;
@@ -177,6 +177,7 @@ figure img {
 ul{
     list-style: none;
 }
+
 
 /*******************CONTACT HTML*********************/
 #row-form{
