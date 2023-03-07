@@ -3,27 +3,25 @@
     padding: 0;
 }
 body{
-    /* background-color: orange !important; */
+
     overflow-x: hidden;
-    height: auto;
+    width: auto;
 }
 main{
     /* background-color: #00b4d8; */
     background-color: #0077b6;
     width: auto;
     height: auto;
+    /* overflow-x: hidden; */
 }
 header{
-    /* background-color: #03045e; */
     background-color: #088bd2;
-    /* background-color: #314bbd; */
-    /* background-color: #90e0ef; */
     width: auto;
     
 }
 footer{
     background-color: #90e0ef;
-    width: auto;
+    width: 100%;
     
 }
 
@@ -74,15 +72,29 @@ footer{
     border: 2px solid #ffffff;
     margin: 4px;
 }
-#row-carrusel{
-    background-color: #0077b6;
+
+/****************************************/
+/* #row-carrusel{ */
+    /* display: flex; */
+    /* flex-direction: column; */
+    /* width: auto; */
+    /* background-color: #0077b6; */
+    /* background-color: green; */
     
-}
+    
+/* } */
+
+
+
+
 .carousel-item{
     height: 30vh;
     /* background-color: #0077b6; */
     background-color: #023e8a;
+    /* width: 50%; */
 }
+
+/************************************/
 
 .carousel-inner h2{
     font-size: 4em;
@@ -118,26 +130,46 @@ footer{
 }
 
 /*************************Cartas******************************/
-
+#tarjetas-cuerpo{
+    width: 100%;
+    display: flex;
+    gap: 3%;
+    justify-content: center;
+    /* background-color: black; */
+}
 .precio{
     display: flex;
-    justify-content: space-around;
+    justify-content: flex-start;
+    gap: 25%;
+    
 }
+
+
 .datos{
     display: flex;
-    justify-content: space-around;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 25%;
 }
 .precio p{
     align-self: baseline;
 }
 
-figure {
+/* figure {
     height: 40%;
-}
+} */
 
-figure img {
+#tarjeta-img{
     height: 100%;
 }
+
+#tarjeta-img img{
+    height: 14em;
+}
+
+/* figure img {
+    height: 100%;
+} */
 
 #tarjetas{
     display: flex;
@@ -149,10 +181,36 @@ figure img {
     margin-bottom: 2%; 
     
 }
-#tarjeta-1, #tarjeta-2, #tarjeta-3, #tarjeta-4, #tarjeta-5, #tarjeta-6{
+
+
+#tarjeta{
     background-color: #caf0f8;
 }
 
+#tarjeta-cuerpo{
+    display: flex;
+    flex-direction: column;
+    color: #000000;
+
+}
+
+#tarjeta-fecha{
+    display: flex;
+    gap: 8%;
+    align-items: baseline;
+}
+
+#tarjeta-ubicacion{
+    display: flex;
+    gap: 8%;
+    align-items: baseline;
+}
+
+#tarjeta-titulo{
+    /* background-color: #000000; */
+    height: 10rem;
+    
+}
 
 /************************FOOTER*********************************/
 #row-footer{
@@ -253,6 +311,7 @@ thead th{
 /*******************MEDIA********************/
 
 @media (max-width:1200px){
+
     #buscador{
         /* justify-content: flex-end; */
         align-self: center;
@@ -339,22 +398,35 @@ thead th{
     }
 }
 
-/* @media (max-width: 758){
-    .carousel-item h2{
-        font-size: 2em;
-        color: black;
+@media (max-width:685px){
+    #categorias{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        
     }
-} */
+}
 
 @media (max-width:630px){
+
+    .carousel-inner h2{
+        font-size: 2.8em;
+        color: #ffffff;
+    }
     #categorias{
-        flex-wrap: wrap;
+        /* flex-wrap: wrap; */
+        /* display: flex; */
+        /* justify-content: center; */
     }
 }
 
 @media (max-width:426px){
 
+
     header{
+        width: 102%;
+    }
+    footer{
         width: 102%;
     }
 
@@ -372,6 +444,10 @@ thead th{
         display: flex;
         flex-direction: column;
         justify-content: center;
+    }
+
+    footer{
+        width: 102%;
     }
 }
 
