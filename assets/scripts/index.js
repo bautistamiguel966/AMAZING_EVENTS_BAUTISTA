@@ -1,10 +1,162 @@
+/*CATEGORIAS*/
+
+function obtenerCategorias() {
+    const categorias = [];
+    data.events.map((event) => {
+    categorias.push(event.category);
+});
+
+    const resultado = categorias.filter((item, index) => {
+    return categorias.indexOf(item) === index;
+});
+
+    return resultado;
+}
+const categoriasEventos = obtenerCategorias();
+
+let categoria = document.getElementById("categorias");
+
+categoriasEventos.map((x) => {
+    categoria.innerHTML += `
+        <div class="form-check form-check-inline" id="cat-elemento">
+            <input class="form-check-input" type="checkbox" value="${x}">
+            <label class="form-check-label" for="inlineCheckbox">${x}</label>
+        </div>
+    `;
+});
+
+/******************** FILTROS BUSQUEDA *****************************************/
+
+const cambio = document.getElementById('categorias');
+
+cambio.addEventListener('change', (event) => {
+    const pal = obtenerPalabra()
+    if(pal.length > 0){
+        const palabras = filtrarPalabra(eventos_total)
+        const check = buscarCheck()
+
+        if(check.length > 0){
+            const categorias = filtrarCategorias(palabras)
+            if(categorias.length > 0){
+                cargarTarjetas(categorias)
+            }else{
+                sinResultado()
+            }
+        }else{
+            if(palabras.length > 0){
+                cargarTarjetas(palabras)
+            }else{
+                sinResultado()
+            }
+        }
+
+    }else{
+        const categorias = filtrarCategorias(eventos_total)
+        const check = buscarCheck()
+        if(check.length > 0){
+            if(categorias.length > 0){
+                cargarTarjetas(categorias)
+            }else{
+                sinResultado()
+            }
+        }else{
+            cargarTarjetas(eventos_total)
+        }
+    }
+});
+
+const cambioTexto = document.getElementById('input-buscar')
+cambioTexto.addEventListener('keyup',(event) =>{
+    const categorias = filtrarCategorias(eventos_total)
+    if(categorias.length > 0){
+        const palabras = filtrarPalabra(categorias)
+        if(palabras.length > 0){
+            cargarTarjetas(palabras)
+        }else{
+            sinResultado()
+        }
+        
+    }else{
+        const palabras = filtrarPalabra(eventos_total)
+        if(palabras.length > 0){
+            cargarTarjetas(palabras)
+        }else{
+            sinResultado()
+        }
+        
+    }
+})
 
 
+const form = document.getElementById("form-categorias");
+form.addEventListener("submit", (e) => {
+    e.preventDefault();
+});
+
+function sinResultado(){
+    limpiarTarjetas()
+    let tarjeta = document.getElementById("tarjetas-cuerpo");
+    tarjeta.innerHTML += `<div class=".row" id="sin-resultado">
+                        <img src="./assets/img/busqueda.png" alt="Sin resultados">
+                        <p>No se encontro ningun resultado.</p>  
+                        </div>`
+}
+
+function obtenerPalabra() {
+    let palabra = document.getElementById("input-buscar");
+    const p = palabra.value.toLocaleLowerCase();
+    return p
+}
+
+function filtrarPalabra(arreglo){
+    const palabra = obtenerPalabra()
+    const pFiltradas = []
+    arreglo.filter((e)=>{
+        const nom = e.name.toLocaleLowerCase()
+        if(nom.includes(palabra)){
+            pFiltradas.push(e)
+        }
+    })
+    return pFiltradas
+}
+
+function filtrarCategorias(arreglo){
+    const categorias = buscarCheck()
+    const catFiltradas = []
+    categorias.map((c)=>{
+        arreglo.filter((e)=>{
+            if(e.category == c){
+                catFiltradas.push(e)
+            }
+        })  
+    })
+    return catFiltradas
+}
+
+function buscarCheck() {
+    let boxs = Array.from(document.querySelectorAll("input[type='checkbox']"));
+    let boxCheckeado = boxs.filter((box) => box.checked);
+    const valor = [];
+    boxCheckeado.map((x) => {
+    valor.push(x.value);
+});
+    return valor;
+}
+
+/*TARJETAS*/
 const eventos_total = data.events;
+cargarTarjetas(eventos_total);
 
-let tarjeta = document.getElementById("tarjetas-cuerpo");
+function limpiarTarjetas(){
+    let tarjeta = document.getElementById("tarjetas-cuerpo");
+    tarjeta.innerHTML = ``
+}
 
-eventos_total.map((x) => {
+
+function cargarTarjetas(arreglo) {
+    let tarjeta = document.getElementById("tarjetas-cuerpo");
+    limpiarTarjetas()
+    arreglo.map((x) => {
     tarjeta.innerHTML += `
         <div class="card" style="width: 18rem;" id="tarjeta">
             <figure id="tarjeta-img">
@@ -15,34 +167,12 @@ eventos_total.map((x) => {
                     <h5 class="card-title">${x.name}</h5>
                     <p class="card-text">${x.description}</p>
                 </div>
-                <div class="datos">
-                    <p>${x.category}</p>
-
-                    <div id="tarjeta-fecha">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar-event" viewBox="0 0 16 16">
-                        <path d="M11 6.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1z"/>
-                        <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/>
-                        </svg>
-                        <p>${x.date}</p>
-                    </div>
-                    
-                    <div id="tarjeta-ubicacion">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
-                        <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
-                        </svg>
-                        <p>${x.place}</p>
-                    </div>
-                    
-                </div>
-                <div class"mas-informacion">
-                    <p>Capacity: ${x.capacity}</p>
-                    <p>Assistance: ${x.assistance}</p>
-                </div>
                 <div class="precio">
                     <p>Price: $${x.price}</p>
-                    <a href="./details.html" class="btn btn-primary">Details</a>
+                    <a href="./details.html?id=${x._id}" class="btn btn-primary">Details</a>
                 </div>
             </div>
         </div>
-    `;
-});
+        `;
+    });
+}
