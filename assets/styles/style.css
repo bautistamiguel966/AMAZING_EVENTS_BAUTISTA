@@ -314,6 +314,9 @@ table{
 thead th{
     text-align: center;
 }
+tbody tr{
+    text-align: center;
+}
 
 
 /*******************MEDIA********************/

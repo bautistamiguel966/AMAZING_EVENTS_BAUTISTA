@@ -1,163 +1,175 @@
-/*CATEGORIAS*/
+/*OBTENER LOS DATOS*/
 
-function obtenerCategorias() {
-    const categorias = [];
-    data.events.map((event) => {
-    categorias.push(event.category);
-});
+let eventos_total;
+const obtenerEventos = async () => {
+    try {
+        let eventos;
+        const respuesta = await fetch('https://mindhub-xj03.onrender.com/api/amazing')
+        eventos = await respuesta.json()
+        eventos_total = eventos.events
+        console.log(eventos_total)
+        cargarTarjetas(eventos_total);
 
-    const resultado = categorias.filter((item, index) => {
-    return categorias.indexOf(item) === index;
-});
 
-    return resultado;
-}
-const categoriasEventos = obtenerCategorias();
+        /*CATEGORIAS*/
 
-let categoria = document.getElementById("categorias");
+        function obtenerCategorias() {
+            const categorias = [];
+            eventos_total.map((event) => {
+                categorias.push(event.category)
+            });
 
-categoriasEventos.map((x) => {
-    categoria.innerHTML += `
+            const resultado = categorias.filter((item, index) => {
+                return categorias.indexOf(item) === index;
+            });
+
+            return resultado;
+        }
+        const categoriasEventos = obtenerCategorias();
+
+        let categoria = document.getElementById("categorias");
+
+        categoriasEventos.map((x) => {
+            categoria.innerHTML += `
         <div class="form-check form-check-inline" id="cat-elemento">
             <input class="form-check-input" type="checkbox" value="${x}">
             <label class="form-check-label" for="inlineCheckbox">${x}</label>
         </div>
     `;
-});
+        });
 
-/******************** FILTROS BUSQUEDA *****************************************/
 
-const cambio = document.getElementById('categorias');
 
-cambio.addEventListener('change', (event) => {
-    const pal = obtenerPalabra()
-    if(pal.length > 0){
-        const palabras = filtrarPalabra(eventos_total)
-        const check = buscarCheck()
+        /******************** FILTROS BUSQUEDA *****************************************/
 
-        if(check.length > 0){
-            const categorias = filtrarCategorias(palabras)
-            if(categorias.length > 0){
-                cargarTarjetas(categorias)
-            }else{
-                sinResultado()
+        const cambio = document.getElementById('categorias');
+
+        cambio.addEventListener('change', (event) => {
+            const pal = obtenerPalabra()
+            if (pal.length > 0) {
+                const palabras = filtrarPalabra(eventos_total)
+                const check = buscarCheck()
+
+                if (check.length > 0) {
+                    const categorias = filtrarCategorias(palabras)
+                    if (categorias.length > 0) {
+                        cargarTarjetas(categorias)
+                    } else {
+                        sinResultado()
+                    }
+                } else {
+                    if (palabras.length > 0) {
+                        cargarTarjetas(palabras)
+                    } else {
+                        sinResultado()
+                    }
+                }
+
+            } else {
+                const categorias = filtrarCategorias(eventos_total)
+                const check = buscarCheck()
+                if (check.length > 0) {
+                    if (categorias.length > 0) {
+                        cargarTarjetas(categorias)
+                    } else {
+                        sinResultado()
+                    }
+                } else {
+                    cargarTarjetas(eventos_total)
+                }
             }
-        }else{
-            if(palabras.length > 0){
-                cargarTarjetas(palabras)
-            }else{
-                sinResultado()
+        });
+
+        const cambioTexto = document.getElementById('input-buscar')
+        cambioTexto.addEventListener('keyup', (event) => {
+            const categorias = filtrarCategorias(eventos_total)
+            if (categorias.length > 0) {
+                const palabras = filtrarPalabra(categorias)
+                if (palabras.length > 0) {
+                    cargarTarjetas(palabras)
+                } else {
+                    sinResultado()
+                }
+
+            } else {
+                const palabras = filtrarPalabra(eventos_total)
+                if (palabras.length > 0) {
+                    cargarTarjetas(palabras)
+                } else {
+                    sinResultado()
+                }
+
             }
-        }
-
-    }else{
-        const categorias = filtrarCategorias(eventos_total)
-        const check = buscarCheck()
-        if(check.length > 0){
-            if(categorias.length > 0){
-                cargarTarjetas(categorias)
-            }else{
-                sinResultado()
-            }
-        }else{
-            cargarTarjetas(eventos_total)
-        }
-    }
-});
-
-const cambioTexto = document.getElementById('input-buscar')
-cambioTexto.addEventListener('keyup',(event) =>{
-    const categorias = filtrarCategorias(eventos_total)
-    if(categorias.length > 0){
-        const palabras = filtrarPalabra(categorias)
-        if(palabras.length > 0){
-            cargarTarjetas(palabras)
-        }else{
-            sinResultado()
-        }
-        
-    }else{
-        const palabras = filtrarPalabra(eventos_total)
-        if(palabras.length > 0){
-            cargarTarjetas(palabras)
-        }else{
-            sinResultado()
-        }
-        
-    }
-})
+        })
 
 
-const form = document.getElementById("form-categorias");
-form.addEventListener("submit", (e) => {
-    e.preventDefault();
-});
+        const form = document.getElementById("form-categorias");
+        form.addEventListener("submit", (e) => {
+            e.preventDefault();
+        });
 
-function sinResultado(){
-    limpiarTarjetas()
-    let tarjeta = document.getElementById("tarjetas-cuerpo");
-    tarjeta.innerHTML += `<div class=".row" id="sin-resultado">
+        function sinResultado() {
+            limpiarTarjetas()
+            let tarjeta = document.getElementById("tarjetas-cuerpo");
+            tarjeta.innerHTML += `<div class=".row" id="sin-resultado">
                         <img src="./assets/img/busqueda.png" alt="Sin resultados">
                         <p>No se encontro ningun resultado.</p>  
                         </div>`
-}
-
-function obtenerPalabra() {
-    let palabra = document.getElementById("input-buscar");
-    const p = palabra.value.toLocaleLowerCase();
-    return p
-}
-
-function filtrarPalabra(arreglo){
-    const palabra = obtenerPalabra()
-    const pFiltradas = []
-    arreglo.filter((e)=>{
-        const nom = e.name.toLocaleLowerCase()
-        if(nom.includes(palabra)){
-            pFiltradas.push(e)
         }
-    })
-    return pFiltradas
-}
 
-function filtrarCategorias(arreglo){
-    const categorias = buscarCheck()
-    const catFiltradas = []
-    categorias.map((c)=>{
-        arreglo.filter((e)=>{
-            if(e.category == c){
-                catFiltradas.push(e)
-            }
-        })  
-    })
-    return catFiltradas
-}
+        function obtenerPalabra() {
+            let palabra = document.getElementById("input-buscar");
+            const p = palabra.value.toLocaleLowerCase();
+            return p
+        }
 
-function buscarCheck() {
-    let boxs = Array.from(document.querySelectorAll("input[type='checkbox']"));
-    let boxCheckeado = boxs.filter((box) => box.checked);
-    const valor = [];
-    boxCheckeado.map((x) => {
-    valor.push(x.value);
-});
-    return valor;
-}
+        function filtrarPalabra(arreglo) {
+            const palabra = obtenerPalabra()
+            const pFiltradas = []
+            arreglo.filter((e) => {
+                const nom = e.name.toLocaleLowerCase()
+                if (nom.includes(palabra)) {
+                    pFiltradas.push(e)
+                }
+            })
+            return pFiltradas
+        }
 
-/*TARJETAS*/
-const eventos_total = data.events;
-cargarTarjetas(eventos_total);
+        function filtrarCategorias(arreglo) {
+            const categorias = buscarCheck()
+            const catFiltradas = []
+            categorias.map((c) => {
+                arreglo.filter((e) => {
+                    if (e.category == c) {
+                        catFiltradas.push(e)
+                    }
+                })
+            })
+            return catFiltradas
+        }
 
-function limpiarTarjetas(){
-    let tarjeta = document.getElementById("tarjetas-cuerpo");
-    tarjeta.innerHTML = ``
-}
+        function buscarCheck() {
+            let boxs = Array.from(document.querySelectorAll("input[type='checkbox']"));
+            let boxCheckeado = boxs.filter((box) => box.checked);
+            const valor = [];
+            boxCheckeado.map((x) => {
+                valor.push(x.value);
+            });
+            return valor;
+        }
 
 
-function cargarTarjetas(arreglo) {
-    let tarjeta = document.getElementById("tarjetas-cuerpo");
-    limpiarTarjetas()
-    arreglo.map((x) => {
-    tarjeta.innerHTML += `
+        /*********** TARJETAS ***********/
+
+
+
+
+
+        function cargarTarjetas(arreglo) {
+            let tarjeta = document.getElementById("tarjetas-cuerpo");
+            limpiarTarjetas()
+            arreglo.map((x) => {
+                tarjeta.innerHTML += `
         <div class="card" style="width: 18rem;" id="tarjeta">
             <figure id="tarjeta-img">
                 <img src="${x.image}" class="card-img-top" alt="${x.name}">
@@ -174,5 +186,21 @@ function cargarTarjetas(arreglo) {
             </div>
         </div>
         `;
-    });
+            });
+        }
+        function limpiarTarjetas() {
+            let tarjeta = document.getElementById("tarjetas-cuerpo");
+            tarjeta.innerHTML = ``
+        }
+
+
+
+    }
+    catch (error) {
+        console.log(error);
+        alert('Error')
+    }
 }
+obtenerEventos()
+
+
