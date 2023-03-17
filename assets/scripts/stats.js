@@ -3,13 +3,41 @@
 
 const cargarTablas = async () => {
     try {
+        const respuesta = await fetch('https://mindhub-xj03.onrender.com/api/amazing')
         let eventos_total;
         let eventos;
-        const respuesta = await fetch('https://mindhub-xj03.onrender.com/api/amazing')
-        eventos = await respuesta.json()
-        eventos_total = eventos.events
-        const eventos_futuros = eventos_total.filter( event => eventos.currentDate < event.date)
-        const eventos_pasados = eventos_total.filter( event => eventos.currentDate > event.date)
+        let eventos_pasados;
+        let eventos_futuros;
+
+        
+        console.log("Estatus de la respuesta, si es distinto de 200, usara el json: Estatus = " + respuesta.status)
+        
+        if(respuesta.status === 200){
+            console.log("Usando la API")
+            eventos = await respuesta.json()
+            eventos_total = eventos.events
+            eventos_pasados = eventos_total.filter( event => eventos.currentDate > event.date)
+            eventos_futuros = eventos_total.filter( event => eventos.currentDate < event.date)
+
+        }else{
+            console.log("Usando el JSON")
+            const respuesta = await fetch('./assets/scripts/amazing.json');
+            eventos = await respuesta.json()
+            eventos_total = eventos.events
+            eventos_pasados = eventos_total.filter( event => eventos.currentDate > event.date)
+            eventos_futuros = eventos_total.filter( event => eventos.currentDate < event.date)
+        }
+
+
+
+
+        // let eventos_total;
+        // let eventos;
+        // const respuesta = await fetch('https://mindhub-xj03.onrender.com/api/amazing')
+        // eventos = await respuesta.json()
+        // eventos_total = eventos.events
+        // const eventos_futuros = eventos_total.filter( event => eventos.currentDate < event.date)
+        // const eventos_pasados = eventos_total.filter( event => eventos.currentDate > event.date)
 
         /****** OBTENGO LOS TRES DATOS DE LA PRIMER TABLA ********/
         let mayor = {}

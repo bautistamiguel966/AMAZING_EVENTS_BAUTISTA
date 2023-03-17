@@ -405,6 +405,9 @@ tbody tr{
 }
 
 @media(max-width: 576px){
+    .carousel-item{
+        height: 20vh;
+    }
 
     /*Detail*/
     #detalle-imagen{
@@ -440,6 +443,7 @@ tbody tr{
         display: flex;
         justify-content: center;
     }
+
 }
 
 @media(max-width: 369px){

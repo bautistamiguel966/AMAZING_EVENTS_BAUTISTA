@@ -1,16 +1,31 @@
 /*OBTENER LOS DATOS*/
 
-let eventos_total;
+
 const obtenerEventos = async () => {
     try {
-        let eventos;
         const respuesta = await fetch('https://mindhub-xj03.onrender.com/api/amazing')
-        eventos = await respuesta.json()
-        eventos_total = eventos.events
-        const eventos_pasados = eventos_total.filter( event => eventos.currentDate > event.date)
-        console.log(eventos_pasados)
-        cargarTarjetas(eventos_pasados);
+        let eventos_total;
+        let eventos;
+        let eventos_pasados;
 
+        
+        console.log("Estatus de la respuesta, si es distinto de 200, usara el json: Estatus = " + respuesta.status)
+        
+        if(respuesta.status === 200){
+            console.log("Usando la API")
+            eventos = await respuesta.json()
+            eventos_total = eventos.events
+            eventos_pasados = eventos_total.filter( event => eventos.currentDate > event.date)
+            cargarTarjetas(eventos_pasados);
+
+        }else{
+            console.log("Usando el JSON")
+            const respuesta = await fetch('./assets/scripts/amazing.json');
+            eventos = await respuesta.json()
+            eventos_total = eventos.events
+            eventos_pasados = eventos_total.filter( event => eventos.currentDate > event.date)
+            cargarTarjetas(eventos_pasados);
+        }
 
         /*CATEGORIAS*/
 
