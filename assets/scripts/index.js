@@ -125,7 +125,7 @@ const obtenerEventos = async () => {
             let tarjeta = document.getElementById("tarjetas-cuerpo");
             tarjeta.innerHTML += `<div class=".row" id="sin-resultado">
                         <img src="./assets/img/busqueda.png" alt="Sin resultados">
-                        <p>No se encontro ningun resultado.</p>  
+                        <p>No events were found.</p>  
                         </div>`
         }
 

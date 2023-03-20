@@ -28,17 +28,6 @@ const cargarTablas = async () => {
             eventos_futuros = eventos_total.filter( event => eventos.currentDate < event.date)
         }
 
-
-
-
-        // let eventos_total;
-        // let eventos;
-        // const respuesta = await fetch('https://mindhub-xj03.onrender.com/api/amazing')
-        // eventos = await respuesta.json()
-        // eventos_total = eventos.events
-        // const eventos_futuros = eventos_total.filter( event => eventos.currentDate < event.date)
-        // const eventos_pasados = eventos_total.filter( event => eventos.currentDate > event.date)
-
         /****** OBTENGO LOS TRES DATOS DE LA PRIMER TABLA ********/
         let mayor = {}
         let menor = {}
