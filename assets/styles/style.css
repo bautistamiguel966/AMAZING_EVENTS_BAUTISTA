@@ -228,10 +228,9 @@ footer{
 #row-footer{
     display: flex;
     justify-content: center;
-    /* align-items: center; */
-    /* align-self: center; */
+    align-items: center;
+    align-self: center;
     width: 100%;
-    /* background-color: green; */
 }
 
 #cohort p{
@@ -272,6 +271,7 @@ form div{
 
 .main-detalle{
     height: 82.3vh;
+    /* height: 82vh; */
     display: flex;
     justify-content: center;
     align-items: center;
