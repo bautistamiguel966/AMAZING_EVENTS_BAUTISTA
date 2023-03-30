@@ -1,216 +1,149 @@
-/*OBTENER LOS DATOS*/
+const { createApp } = Vue;
 
-
-const obtenerEventos = async () => {
-    try {
-        const respuesta = await fetch('https://mindhub-xj03.onrender.com/api/amazing')
-        let eventos_total;
-        let eventos;
-
-        
-        console.log("Estatus de la respuesta, si es distinto de 200, usara el json: Estatus = " + respuesta.status)
-        
-        if(respuesta.status === 200){
-            console.log("Usando la API")
-            eventos = await respuesta.json()
-            eventos_total = eventos.events
-            cargarTarjetas(eventos_total);
-
-        }else{
-            console.log("Usando el JSON")
-            const respuesta = await fetch('./assets/scripts/amazing.json');
-            eventos = await respuesta.json()
-            eventos_total = eventos.events
-            cargarTarjetas(eventos_total);
-        }
-        /*CATEGORIAS*/
-
-        function obtenerCategorias() {
-            const categorias = [];
-            eventos_total.map((event) => {
-                categorias.push(event.category)
-            });
-
-            const resultado = categorias.filter((item, index) => {
-                return categorias.indexOf(item) === index;
-            });
-
-            return resultado;
-        }
-        const categoriasEventos = obtenerCategorias();
-
-        let categoria = document.getElementById("categorias");
-
-        categoriasEventos.map((x) => {
-            categoria.innerHTML += `
-        <div class="form-check form-check-inline" id="cat-elemento">
-            <input class="form-check-input" type="checkbox" value="${x}">
-            <label class="form-check-label" for="inlineCheckbox">${x}</label>
-        </div>
-    `;
-        });
-
-
-
-        /******************** FILTROS BUSQUEDA *****************************************/
-
-        const cambio = document.getElementById('categorias');
-
-        cambio.addEventListener('change', (event) => {
-            const pal = obtenerPalabra()
-            if (pal.length > 0) {
-                const palabras = filtrarPalabra(eventos_total)
-                const check = buscarCheck()
-
-                if (check.length > 0) {
-                    const categorias = filtrarCategorias(palabras)
-                    if (categorias.length > 0) {
-                        cargarTarjetas(categorias)
-                    } else {
-                        sinResultado()
-                    }
-                } else {
-                    if (palabras.length > 0) {
-                        cargarTarjetas(palabras)
-                    } else {
-                        sinResultado()
-                    }
-                }
-
-            } else {
-                const categorias = filtrarCategorias(eventos_total)
-                const check = buscarCheck()
-                if (check.length > 0) {
-                    if (categorias.length > 0) {
-                        cargarTarjetas(categorias)
-                    } else {
-                        sinResultado()
-                    }
-                } else {
-                    cargarTarjetas(eventos_total)
-                }
-            }
-        });
-
-        const cambioTexto = document.getElementById('input-buscar')
-        cambioTexto.addEventListener('keyup', (event) => {
-            const categorias = filtrarCategorias(eventos_total)
-            if (categorias.length > 0) {
-                const palabras = filtrarPalabra(categorias)
-                if (palabras.length > 0) {
-                    cargarTarjetas(palabras)
-                } else {
-                    sinResultado()
-                }
-
-            } else {
-                const palabras = filtrarPalabra(eventos_total)
-                if (palabras.length > 0) {
-                    cargarTarjetas(palabras)
-                } else {
-                    sinResultado()
-                }
-
-            }
-        })
-
-
-        const form = document.getElementById("form-categorias");
-        form.addEventListener("submit", (e) => {
-            e.preventDefault();
-        });
-
-        function sinResultado() {
-            limpiarTarjetas()
-            let tarjeta = document.getElementById("tarjetas-cuerpo");
-            tarjeta.innerHTML += `<div class=".row" id="sin-resultado">
-                        <img src="./assets/img/busqueda.png" alt="Sin resultados">
-                        <p>No events were found.</p>  
-                        </div>`
-        }
-
-        function obtenerPalabra() {
-            let palabra = document.getElementById("input-buscar");
-            const p = palabra.value.toLocaleLowerCase();
-            return p
-        }
-
-        function filtrarPalabra(arreglo) {
-            const palabra = obtenerPalabra()
-            const pFiltradas = []
-            arreglo.filter((e) => {
-                const nom = e.name.toLocaleLowerCase()
-                if (nom.includes(palabra)) {
-                    pFiltradas.push(e)
+const app = createApp({
+    data() {
+        return {
+            urlApi: "https://mindhub-xj03.onrender.com/api/amazing",
+            urlJson: "./assets/scripts/amazing.json",
+            backup_eventos: [],
+            backup_pasados: [],
+            backup_futuros: [],
+            eventos: [],
+            eventos_pasados: [],
+            categorias: [],
+            categoriasSeleccionadas: [],
+            texto: '',
+            date: 0,
+            evento_detail: [],
+            mayor: {},
+            menor: {},
+            capacidad: {},
+            tabla_futuros: [],
+            tabla_pasados: [],
+        };
+    },
+    created() {
+        this.pedirDatos()
+    },
+    mounted() { },
+    methods: {
+        pedirDatos(){
+            fetch(this.urlApi)
+                .then(response => response.json())
+                .then(datosApi =>{
+                    this.eventos = datosApi.events
+                    this.backup_eventos = datosApi.events
+                    this.date = datosApi.currentDate
+                    this.obtenerCategorias(this.backup_eventos)
+                    this.obtenerTabla(this.backup_eventos)
+                    this.eventos_pasados = this.eventos.filter( event => this.date > event.date)
+                    this.backup_pasados = this.eventos_pasados
+                    this.eventos_futuros = this.eventos.filter( event => this.date < event.date)
+                    this.backup_futuros = this.eventos_futuros
+                    this.obtenerTabla2(this.backup_futuros, this.tabla_futuros)
+                    this.ordenartabla(this.tabla_futuros)
+                    this.obtenerTabla2(this.backup_pasados, this.tabla_pasados)
+                    this.ordenartabla(this.tabla_pasados)
+                    this.infoDetails()
+                })
+        },
+        obtenerCategorias(array){
+            array.forEach(elemento =>{
+                if(!this.categorias.includes(elemento.category)){
+                    this.categorias.push(elemento.category)
                 }
             })
-            return pFiltradas
-        }
-
-        function filtrarCategorias(arreglo) {
-            const categorias = buscarCheck()
-            const catFiltradas = []
-            categorias.map((c) => {
-                arreglo.filter((e) => {
+        },
+        obtenerTabla(array){
+            let mayorA = 0
+            let menorA = 100
+            let mayorC = 0
+            array.map((event)=>{
+                let asistencia = ((event.assistance * 100) / event.capacity)
+                if(asistencia > mayorA){
+                    mayorA = asistencia
+                    this.mayor.name = event.name
+                    this.mayor.assistance = asistencia.toFixed(2)
+                }
+                if(asistencia < menorA){
+                    menorA = asistencia
+                    this.menor.name = event.name
+                    this.menor.assistance = asistencia.toFixed(2)
+                }
+                if(event.capacity > mayorC){
+                    mayorC = event.capacity
+                    this.capacidad.name = event.name
+                    this.capacidad.capacity = event.capacity
+                }
+            })
+        },
+        obtenerTabla2(array, array2){
+            this.categorias.map((c) => {
+                elem = {}
+                let nombre;
+                let asistencia = 0;
+                let cont = 0;
+                let ingreso = 0;
+                let result = 0
+                array.filter((e) => {
                     if (e.category == c) {
-                        catFiltradas.push(e)
+                        nombre = e.category;
+                        if(e.estimate !== undefined){
+                            ingreso += e.estimate * e.price
+                            asistencia += ((e.estimate * 100) / e.capacity)
+                        }else{
+                            ingreso += e.assistance * e.price
+                            asistencia += ((e.assistance * 100) / e.capacity)
+                        }
+                        cont += 1
                     }
                 })
+                result = asistencia / cont
+                elem.name = nombre
+                elem.revenue = ingreso
+                elem.assistance = result.toFixed(2)
+                if(elem.name !== undefined){
+                    array2.push(elem)
+                }
+                
             })
-            return catFiltradas
+        },
+        ordenartabla(array){
+            for(let i = 0; i < array.length; i++) {
+                for(let j = 0; j <(array.length)-1; j++) {
+                    if(parseInt(array[i].assistance) > parseInt(array[j].assistance)){
+                        aux = array[j]
+                        array[j] = array[i]
+                        array[i] = aux
+                    }
+                }
+            }
+        },
+        infoDetails(){
+            const querySearch = document.location.search
+            const id = new URLSearchParams(querySearch).get("id")
+            this.evento_detail = this.backup_eventos.find(evento => evento._id === parseInt(id))
         }
 
-        function buscarCheck() {
-            let boxs = Array.from(document.querySelectorAll("input[type='checkbox']"));
-            let boxCheckeado = boxs.filter((box) => box.checked);
-            const valor = [];
-            boxCheckeado.map((x) => {
-                valor.push(x.value);
-            });
-            return valor;
-        }
+    },
+    computed: {
 
+        filtroDoble(){
+            let primerFiltro = this.backup_eventos.filter(evento => evento.name.toLowerCase().includes(this.texto.toLowerCase()))
+            let primerFiltro2 = this.backup_pasados.filter(evento => evento.name.toLowerCase().includes(this.texto.toLowerCase()))
+            let primerFiltro3 = this.backup_futuros.filter(evento => evento.name.toLowerCase().includes(this.texto.toLowerCase()))
 
-        /*********** TARJETAS ***********/
+            if(!this.categoriasSeleccionadas.length){
+                this.eventos = primerFiltro
+                this.eventos_pasados = primerFiltro2
+                this.eventos_futuros = primerFiltro3
+            }else{
+                this.eventos = primerFiltro.filter(evento => this.categoriasSeleccionadas.includes(evento.category))
+                this.eventos_pasados = primerFiltro2.filter(evento => this.categoriasSeleccionadas.includes(evento.category))
+                this.eventos_futuros = primerFiltro3.filter(evento => this.categoriasSeleccionadas.includes(evento.category))
+            }
+        },
 
+    },
+}).mount("#app");
 
-
-
-
-        function cargarTarjetas(arreglo) {
-            let tarjeta = document.getElementById("tarjetas-cuerpo");
-            limpiarTarjetas()
-            arreglo.map((x) => {
-                tarjeta.innerHTML += `
-        <div class="card" style="width: 18rem;" id="tarjeta">
-            <figure id="tarjeta-img">
-                <img src="${x.image}" class="card-img-top" alt="${x.name}">
-            </figure>
-            <div class="card-body" id="tarjeta-cuerpo">
-                <div id="tarjeta-titulo">
-                    <h5 class="card-title">${x.name}</h5>
-                    <p class="card-text">${x.description}</p>
-                </div>
-                <div class="precio">
-                    <p>Price: $${x.price}</p>
-                    <a href="./details.html?id=${x._id}" class="btn btn-primary">Details</a>
-                </div>
-            </div>
-        </div>
-        `;
-            });
-        }
-        function limpiarTarjetas() {
-            let tarjeta = document.getElementById("tarjetas-cuerpo");
-            tarjeta.innerHTML = ``
-        }
-
-
-
-    }
-    catch (error) {
-        console.log(error);
-        alert('Error')
-    }
-}
-obtenerEventos()

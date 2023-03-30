@@ -47,8 +47,50 @@
     </div>
   </header>
   <main class="main-detalle">
-    <div class="row" id="tarjeta-detalle">
-
+    <div id="app">
+      <!-- {{infoDetails}} -->
+      <div class="row" id="tarjeta-detalle">
+        <div class="col-sm-4 col-md-4 col-lg-4" id="detalle-imagen">
+          <img :src="evento_detail.image" alt="{{evento_detail.name}}">
+        </div>
+        <div class="col-sm-4 col-md-4 col-lg-4" id="detalle-texto">
+          <h2>{{evento_detail.name}}</h2>
+          <p>{{evento_detail.description}}</p>
+  
+          <div class="datos">
+            <p>Category: {{evento_detail.category}}</p>
+  
+            <div id="tarjeta-fecha">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                class="bi bi-calendar-event" viewBox="0 0 16 16">
+                <path d="M11 6.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1z" />
+                <path
+                  d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z" />
+              </svg>
+              <p>{{evento_detail.date}}</p>
+            </div>
+  
+            <div id="tarjeta-ubicacion">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
+                <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z" />
+              </svg>
+              <p>{{evento_detail.place}}</p>
+            </div>
+          </div>
+          <div class="mas-informacion">
+            <p>Capacity: {{evento_detail.capacity}}</p>
+            <div v-if="evento_detail.assistance" class="div">
+              <p>Assistance: {{evento_detail.assistance}}</p>
+            </div>
+            <div v-if="evento_detail.estimate" class="div">
+              <p>Estimate: {{evento_detail.estimate}}</p>
+            </div>
+            
+            <p>Price: ${{evento_detail.price}}</p>
+          </div>
+        </div>
+      </div>
     </div>
 
   </main>
@@ -57,16 +99,13 @@
     <div class="row" id="row-footer">
       <div class="col-sm-6 col-md-6 col-lg-6" id="redes">
         <div class="row">
-          <a href="https://www.instagram.com" target="_blank"><i
-            class="fa-brands fa-instagram fa-2xl"></i></a>
+          <a href="https://www.instagram.com" target="_blank"><i class="fa-brands fa-instagram fa-2xl"></i></a>
         </div>
         <div class="row">
-          <a href="https://www.facebook.com" target="_blank"><i
-            class="fa-brands fa-facebook fa-2xl"></i></a>
+          <a href="https://www.facebook.com" target="_blank"><i class="fa-brands fa-facebook fa-2xl"></i></a>
         </div>
         <div class="row">
-          <a href="https://www.whatsapp.com" target="_blank"><i
-            class="fa-brands fa-whatsapp fa-2xl"></i></a>
+          <a href="https://www.whatsapp.com" target="_blank"><i class="fa-brands fa-whatsapp fa-2xl"></i></a>
         </div>
       </div>
 
@@ -78,7 +117,8 @@
 
 
 
-  <script src="./assets/scripts/details.js"></script>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script src="./assets/scripts/index.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
     crossorigin="anonymous"></script>
